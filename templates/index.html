@@ -1,31 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Smart Waste Disposal Guide</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9fafb;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Header bar with distinct color */
+        header {
+            background-color: #00796b; /* teal/dark cyan */
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+        }
+        header h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        /* Main container */
+        .container {
+            max-width: 900px;
+            width: 90%;
+            margin: 2rem auto 3rem;
+            background: white;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.07);
+            border-radius: 12px;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #555;
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+        /* Form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        label {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            display: block;
+            color: #004d40;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #00796b;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+        textarea:focus {
+            border-color: #004d40;
+            outline: none;
+            background: #e0f2f1;
+        }
+        button[type="submit"] {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #004d40;
+        }
+        /* Loading spinner and text */
+        #loading {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+            color: #00796b;
+            font-weight: 600;
+        }
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #00796b;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Results styling */
+        #results {
+            margin-top: 3rem;
+            color: #004d40;
+        }
+        #results h2 {
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.75rem;
+            font-weight: 700;
+        }
+        .result-section {
+            margin-bottom: 1.5rem;
+            padding: 1.15rem 1.3rem;
+            background: #e0f2f1;
+            border-radius: 10px;
+            box-shadow: inset 0 0 8px rgb(0 121 107 / 0.15);
+        }
+        .result-section h3 {
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            color: #00796b;
+        }
+        .result-section ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            color: #004d40;
+        }
+        /* Error message */
+        #error {
+            margin-top: 2rem;
+            padding: 1rem 1.3rem;
+            background: #ffebee;
+            border: 1.5px solid #f44336;
+            border-radius: 8px;
+            color: #b71c1c;
+            font-weight: 700;
+            text-align: center;
+        }
+        /* Utility - hide */
+        .hidden {
+            display: none !important;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 1.5rem 1.5rem;
+            }
+            header h1 {
+                font-size: 1.4rem;
+            }
+            button[type="submit"] {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Smart Waste Disposal Guide</h1>
+    </header>
+
     <div class="container">
-        <h1>Smart Waste Disposal</h1>
-        <p>Describe your waste item and get proper disposal instructions</p>
-        
+        <p class="intro">Describe your waste item and get proper disposal instructions</p>
+
         <form id="wasteForm">
-            <div class="form-group">
-                <label for="wasteDescription">Describe your waste item*:</label>
-                <textarea id="wasteDescription" required 
-                    placeholder="e.g., 'An old laptop battery that's swollen' or 'Broken glass bottles from a party'"></textarea>
-            </div>
-            
+            <label for="wasteDescription">Describe your waste item*:</label>
+            <textarea id="wasteDescription" placeholder="e.g., 'An old laptop battery that's swollen' or 'Broken glass bottles from a party'" required></textarea>
             <button type="submit">Analyze Waste</button>
         </form>
-        
+
         <div id="loading" class="hidden">
             <div class="spinner"></div>
             <p>Analyzing your waste item...</p>
         </div>
-        
+
         <div id="results" class="hidden">
             <h2>Analysis Results</h2>
             <div class="result-section">
@@ -45,28 +210,28 @@
                 <ul id="recyclingOptions"></ul>
             </div>
         </div>
-        
+
         <div id="error" class="hidden">
             <p class="error-message"></p>
         </div>
     </div>
-    
+
     <script>
         document.getElementById('wasteForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const wasteDescription = document.getElementById('wasteDescription').value.trim();
-            
+
             if (!wasteDescription) {
                 showError('Please describe your waste item');
                 return;
             }
-            
+
             // Show loading, hide results and error
             document.getElementById('loading').classList.remove('hidden');
             document.getElementById('results').classList.add('hidden');
             document.getElementById('error').classList.add('hidden');
-            
+
             try {
                 const response = await fetch('/api/analyze-waste', {
                     method: 'POST',
@@ -77,9 +242,9 @@
                         waste_description: wasteDescription
                     })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (response.ok) {
                     displayResults(data);
                     document.getElementById('results').classList.remove('hidden');
@@ -95,12 +260,10 @@
 
         function displayResults(data) {
             try {
-                {
-    document.getElementById('classification').textContent = data.classification;
-    document.getElementById('disposalMethods').innerHTML = data.disposal_methods.map(m => `<li>${m}</li>`).join('');
-    document.getElementById('safetyPrecautions').innerHTML = data.safety_precautions.map(s => `<li>${s}</li>`).join('');
-    document.getElementById('recyclingOptions').innerHTML = data.recycling_options.map(r => `<li>${r}</li>`).join('');
-}
+                document.getElementById('classification').textContent = data.classification;
+                document.getElementById('disposalMethods').innerHTML = data.disposal_methods.map(m => `<li>${m}</li>`).join('');
+                document.getElementById('safetyPrecautions').innerHTML = data.safety_precautions.map(s => `<li>${s}</li>`).join('');
+                document.getElementById('recyclingOptions').innerHTML = data.recycling_options.map(r => `<li>${r}</li>`).join('');
             } catch (e) {
                 showError('Failed to parse response from server');
             }
