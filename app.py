@@ -13,7 +13,7 @@ app = Flask(__name__)
 CORS(app)
 
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-model = genai.GenerativeModel('gemini-2.5-flash')
+model = genai.GenerativeModel('gemini-2.5-flash-lite')
 
 last_request_time = 0
 REQUEST_INTERVAL = 2
